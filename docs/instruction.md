@@ -113,11 +113,6 @@ docker-compose exec php php bin/console doctrine:migrations:migrate
 
 ![Таблицы в БД](images/db.png)
 
-
-
-
-
-# Контроллер
 Создадим контроллер для отображения списка фильмов:
 ```shell
 docker-compose exec php php bin/console make:controller Movie
@@ -144,4 +139,21 @@ docker-compose exec php php bin/console make:form Movie
 
 ![Шаблоны](images/twig.png)
 
-Посмотрим что получилось
+
+### Посмотрим что получилось:
+
+Сбор фильмов:
+
+![img.png](images/command.png)
+
+
+Страница фильмов:
+
+![Шаблоны](images/result.png)
+
+
+
+В дальнейшем можно проработать фронтенд с помощью `Encore`:
+```shell
+composer require symfony/webpack-encore-bundle
+```
