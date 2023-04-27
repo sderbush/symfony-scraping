@@ -14,7 +14,7 @@ class MovieManager
         private CacheInterface $cache,
         private LoggerInterface $logger,
         private MovieRepository $movieRepository,
-        private string $ttl,
+        private int $ttl,
     ) {
     }
 

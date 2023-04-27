@@ -27,4 +27,3 @@ vendor/
 .env.local.php
 .env.test
 .idea/
-/node_modules/
