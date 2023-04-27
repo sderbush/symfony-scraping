@@ -1,0 +1,18 @@
+{
+  "name": "movies",
+  "version": "1.0.0",
+  "description": "```shell docker-compose up ```",
+  "main": "test.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^19.11.1"
+  }
+}
