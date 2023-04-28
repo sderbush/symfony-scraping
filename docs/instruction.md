@@ -35,7 +35,6 @@ cd movies
 # Настроим docker для работы
 Воспользуемся репозиторием `https://github.com/api-platform/api-platform` и возьмем из него конфиги.
 Поправим конфиги и оставим только php и веб сервер caddy.
-Добавим в php пакеты nodejs, npm, puppeter.
 
 ![](images/files-for-docker.png)
 
@@ -54,6 +53,7 @@ docker-compose exec php composer require symfony/security-csrf
 docker-compose exec php composer require symfony/symfony/form
 docker-compose exec php composer require --dev symfony/maker-bundle
 docker-compose exec php composer require --dev symfony/debug-bundle
+docker-compose exec php composer require symfony/webpack-encore-bundle
 ```
 
 
@@ -67,10 +67,14 @@ docker-compose exec php php bin/console make:command app:get-movies
 ```
 src/Command/GetMoviesCommand.php
 ```
-Воспользуемся библиотекой `browsershot` которая использует puppeter для получения страницы сайта после выполнения js:
+Воспользуемся библиотекой `php-webdriver/webdriver` которая будет подключаться к удаленному хосту selenium-а и выполнения js:
 ```shell
-docker-compose exec php composer require spatie/browsershot`
+docker-compose exec php composer require php-webdriver/webdriver`
 ```
+
+Добавим в `docker-compose` service chrome(selenium/standalone-chrome:latest).
+
+
 Создадим скрипт для сбора данных со страницы:
 ```
 config/scraping_scripts/movies.js
@@ -150,10 +154,3 @@ docker-compose exec php php bin/console make:form Movie
 Страница фильмов:
 
 ![Шаблоны](images/result.png)
-
-
-
-В дальнейшем можно проработать фронтенд с помощью `Encore`:
-```shell
-composer require symfony/webpack-encore-bundle
-```

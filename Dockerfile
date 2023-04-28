@@ -7,10 +7,8 @@ ENV APP_ENV=prod
 
 WORKDIR /srv/app
 
-# php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
-# persistent / runtime deps
 RUN apk add --no-cache \
 		acl \
 		fcgi \
@@ -25,20 +23,15 @@ RUN set -eux; \
     	zip \
     	apcu \
 		opcache \
+		pdo_pgsql \
     ;
 
-###> recipes ###
-###> doctrine/doctrine-bundle ###
-RUN set -eux; \
-    install-php-extensions pdo_pgsql
-###< doctrine/doctrine-bundle ###
-###< recipes ###
-
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 COPY --link docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
 COPY --link docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
-
 COPY --link docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+
 RUN mkdir -p /var/run/php
 
 COPY --link docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
@@ -48,29 +41,6 @@ HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
 
 COPY --link docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-
-
-### INSTALL Puppeter for spatie/browsershot ###
-# Installs latest Chromium (100) package.
-COPY package.json package-lock.json ./
-RUN apk add --no-cache \
-      chromium \
-      nss \
-      freetype \
-      harfbuzz \
-      ca-certificates \
-      ttf-freefont \
-      nodejs \
-      npm
-
-ENV PUPPETEER_SKIP_DOWNLOAD=1
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-RUN npm i --production
-
-RUN set -eux; \
-    install-php-extensions exif
-
-### END INSTALL Puppeter for spatie/browsershot ###
 
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm"]
@@ -113,7 +83,6 @@ RUN set -eux; \
 	install-php-extensions xdebug
 
 RUN rm -f .env.local.php
-RUN npm i
 
 # Build Caddy with the Mercure and Vulcain modules
 FROM caddy:2-builder-alpine AS app_caddy_builder

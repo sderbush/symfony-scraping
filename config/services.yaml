@@ -28,6 +28,7 @@ services:
         arguments:
             $url: 'https://www.kinopoisk.ru/lists/movies/top250/'
             $parseScriptPath: '%scraping_scripts_directory%/movies.js'
+            $remoteChromeWebdriver: 'http://chrome:4444'
 
     App\Service\MovieManager:
         arguments:

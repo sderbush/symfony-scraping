@@ -69,6 +69,13 @@ services:
       retries: 3
       timeout: 5s
 
+  chrome:
+    image: selenium/standalone-chrome:latest
+    shm_size: 2gb
+    ports:
+      - '4444:4444'
+      - '7900:7900'
+
 volumes:
   php_socket:
   caddy_data:
